@@ -137,6 +137,7 @@
     <ClCompile Include="..\common\stb.cpp" />
     <ClCompile Include="..\common\Texture.cpp" />
     <ClCompile Include="..\common\tiny_obj_loader.cpp" />
+    <ClCompile Include="..\common\UTILS.cpp" />
     <ClCompile Include="..\common\VAO.cpp" />
     <ClCompile Include="..\common\VBO.cpp" />
     <ClCompile Include="main.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="..\common\GLShader.h" />
     <ClInclude Include="..\common\Mesh.h" />
     <ClInclude Include="..\common\Texture.h" />
+    <ClInclude Include="..\common\UTILS.h" />
     <ClInclude Include="..\common\VAO.h" />
     <ClInclude Include="..\common\VBO.h" />
   </ItemGroup>
