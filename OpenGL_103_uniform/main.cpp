@@ -1,4 +1,5 @@
 #define GLEW_STATIC 1
+#include "../common/tiny_obj_loader.h"
 
 #include <iostream>
 #include<string>
@@ -145,6 +146,83 @@ GLuint indices2[] =
 
 const unsigned int width = 1000;
 const unsigned int height = 700;
+struct Model
+{
+	std::vector<glm::vec3> vertices;
+	std::vector<glm::vec2> texCoords;
+	std::vector<glm::vec3> normals;
+	std::vector<unsigned int> indices;
+};
+
+Model loadModel(const std::string& filename)
+{
+	Model model;
+
+	tinyobj::attrib_t attrib;
+	std::vector<tinyobj::shape_t> shapes;
+	std::vector<tinyobj::material_t> materials;
+	std::string warn, err;
+
+	if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, filename.c_str()))
+	{
+		// Erreur de chargement du modèle
+		// Gérez l'erreur de chargement du modèle ici
+		return model;
+	}
+
+	// Parcours des vertices
+	for (const auto& shape : shapes)
+	{
+		for (const auto& index : shape.mesh.indices)
+		{
+			glm::vec3 vertex;
+			vertex.x = attrib.vertices[3 * index.vertex_index + 0];
+			vertex.y = attrib.vertices[3 * index.vertex_index + 1];
+			vertex.z = attrib.vertices[3 * index.vertex_index + 2];
+			model.vertices.push_back(vertex);
+
+			glm::vec2 texCoord;
+			texCoord.x = attrib.texcoords[2 * index.texcoord_index + 0];
+			texCoord.y = attrib.texcoords[2 * index.texcoord_index + 1];
+			model.texCoords.push_back(texCoord);
+
+			glm::vec3 normal;
+			normal.x = attrib.normals[3 * index.normal_index + 0];
+			normal.y = attrib.normals[3 * index.normal_index + 1];
+			normal.z = attrib.normals[3 * index.normal_index + 2];
+			model.normals.push_back(normal);
+
+			model.indices.push_back(model.indices.size());
+		}
+	}
+
+	return model;
+}
+
+
+
+void drawModel(const Model& model)
+{
+	// Activation des tableaux de vertex
+	glEnableVertexAttribArray(0); // Vertices
+	glEnableVertexAttribArray(1); // Coordonnées de texture
+	glEnableVertexAttribArray(2); // Normales
+
+	// Spécification des données de vertex
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, model.vertices.data());
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, model.texCoords.data());
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, model.normals.data());
+
+	// Dessin des triangles
+	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(model.indices.size()), GL_UNSIGNED_INT, model.indices.data());
+
+	// Désactivation des tableaux de vertex
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
+}
+
+
 
 
 void drawTwoCubes()
@@ -188,6 +266,37 @@ void drawTwoCubes()
 		 -0.5f, -0.5f, -0.5f
 	};
 
+
+	GLfloat colors1[] = {
+		// Face avant (rouge)
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+
+		// Face arrière (vert)
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+
+		// ... autres faces du premier cube ...
+
+	};
+
+	GLfloat colors2[] = {
+		// Face avant (bleu)
+		0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f,
+
+		// Face arrière (jaune)
+		1.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
+	};
 	// Tableau des sommets du deuxième cube (décalé en x)
 	GLfloat vertices2[] = {
 		// Face avant
@@ -258,19 +367,15 @@ void drawTwoCubes()
 		20, 21, 22,
 		22, 23, 20
 	};
-	GLfloat colors1[] = {
-		// Couleurs du premier cube (rouge)
-		1.0f, 0.0f, 0.0f, // Rouge
-		1.0f, 0.0f, 0.0f, // Rouge
-		// ...
-	};
 
-	GLfloat colors2[] = {
-		// Couleurs du deuxième cube (jaune)
-		1.0f, 1.0f, 0.0f, // Jaune
-		1.0f, 1.0f, 0.0f, // Jaune
-		// ...
-	};
+
+
+
+	GLShader shader;
+	/*shader.LoadVertexShader("vertex_shader.glsl");
+	shader.LoadGeometryShader("geometry_shader.glsl");
+	shader.LoadFragmentShader("fragment_shader.glsl");*/
+	shader.Create();
 
 	// Création et configuration du VAO pour le premier cube
 	GLuint VAO1;
@@ -286,12 +391,6 @@ void drawTwoCubes()
 	glEnableVertexAttribArray(0);
 
 	// Création et configuration du VBO pour les couleurs du premier cube
-	GLuint colorVBO1;
-	glGenBuffers(1, &colorVBO1);
-	glBindBuffer(GL_ARRAY_BUFFER, colorVBO1);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(colors1), colors1, GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(1);
 
 	// Création et configuration de l'EBO pour le premier cube
 	GLuint EBO1;
@@ -312,6 +411,15 @@ void drawTwoCubes()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 
+
+
+	GLuint colorVBO1;
+	glGenBuffers(1, &colorVBO1);
+	glBindBuffer(GL_ARRAY_BUFFER, colorVBO1);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(colors1), colors1, GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(1);
+
 	// Création et configuration du VBO pour les couleurs du deuxième cube
 	GLuint colorVBO2;
 	glGenBuffers(1, &colorVBO2);
@@ -320,7 +428,8 @@ void drawTwoCubes()
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(1);
 
-	// Création et configuration de l'EBO pour le deuxième cube
+
+
 	GLuint EBO2;
 	glGenBuffers(1, &EBO2);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO2);
@@ -328,23 +437,24 @@ void drawTwoCubes()
 
 	// Dessin du premier cube
 	glBindVertexArray(VAO1);
+	glUseProgram(shader.GetProgram());  // Liez le programme de shader avant le rendu
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
 	// Dessin du deuxième cube
 	glBindVertexArray(VAO2);
+	glUseProgram(shader.GetProgram());  // Liez le programme de shader avant le rendu
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
 	// Nettoyage des ressources
 	glDeleteVertexArrays(1, &VAO1);
 	glDeleteBuffers(1, &VBO1);
-	glDeleteBuffers(1, &colorVBO1);
 	glDeleteBuffers(1, &EBO1);
 	glDeleteVertexArrays(1, &VAO2);
 	glDeleteBuffers(1, &VBO2);
-	glDeleteBuffers(1, &colorVBO2);
 	glDeleteBuffers(1, &EBO2);
+	shader.Destroy();
 }
 
 void displayGLInfos() {
@@ -542,15 +652,15 @@ int main() {
 		// Draw the actual mesh
 		/*glDrawElements(GL_TRIANGLES, ind.size(), GL_UNSIGNED_INT, 0);
 		glDrawElements(GL_TRIANGLES, ind2.size(), GL_UNSIGNED_INT, 0);*/
+		Model myModel = loadModel("C:/Users/hadri/Documents/OpenGL2/OpenGL_103_uniform/models/cat.obj");
 
 		drawTwoCubes();
-		
+		drawModel(myModel);
 		// Swap the back buffer with the front buffer
 		glfwSwapBuffers(window);
 		// Take care of all GLFW events
 		glfwPollEvents();
 	}
-
 
 
 
