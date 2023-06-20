@@ -347,7 +347,17 @@ void drawTwoCubes()
 	glDeleteBuffers(1, &EBO2);
 }
 
+void displayGLInfos() {
+	std::cout << "Carte Graphique : " << glGetString(GL_RENDERER) << std::endl;
+	std::cout << "Version OpenGL : " << glGetString(GL_VERSION) << std::endl;
+	std::cout << "version GLSL : " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 
+	int numExtensions = 0;
+	glGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
+	for (int i = 0; i < numExtensions; i++) {
+		std::cout << "Extensions[" << i << "] " << glGetStringi(GL_EXTENSIONS, i) << std::endl;
+	}
+}
 
 
 
@@ -376,7 +386,7 @@ int main() {
 		glfwTerminate();
 		return -1;
 	}
-
+	
 	// Introduce the window into the current context
 	glfwMakeContextCurrent(window);
 
@@ -400,7 +410,7 @@ int main() {
 	};	
 	
 
-	
+	displayGLInfos();
 
 	// Generates Shader object using shaders default.vs.glsl and default.vs.glsl
 	GLShader shaderProgram;
