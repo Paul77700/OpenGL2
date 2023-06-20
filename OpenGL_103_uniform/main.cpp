@@ -147,6 +147,205 @@ const unsigned int width = 1000;
 const unsigned int height = 700;
 
 
+void drawTwoCubes()
+{
+	// Tableau des sommets du premier cube
+	GLfloat vertices1[] = {
+		// Face avant
+		  -0.5f, -0.5f,  0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+
+		// Face arrière
+		-0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		-0.5f,  0.5f, -0.5f,
+
+		// Face gauche
+		-0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f,  0.5f,  0.5f,
+
+		// Face droite
+		 0.5f, -0.5f,  0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f,  0.5f,
+
+		 // Face supérieure
+		 -0.5f,  0.5f,  0.5f,
+		  0.5f,  0.5f,  0.5f,
+		  0.5f,  0.5f, -0.5f,
+		 -0.5f,  0.5f, -0.5f,
+
+		 // Face inférieure
+		 -0.5f, -0.5f,  0.5f,
+		  0.5f, -0.5f,  0.5f,
+		  0.5f, -0.5f, -0.5f,
+		 -0.5f, -0.5f, -0.5f
+	};
+
+	// Tableau des sommets du deuxième cube (décalé en x)
+	GLfloat vertices2[] = {
+		// Face avant
+	   0.5f, -0.5f,  0.5f,
+		1.5f, -0.5f,  0.5f,
+		1.5f,  0.5f,  0.5f,
+		0.5f,   0.5f,  0.5f,
+
+		// Face arrière
+		0.5f, -0.5f, -0.5f,
+		 1.5f, -0.5f, -0.5f,
+		 1.5f,  0.5f, -0.5f,
+		0.5f,  0.5f, -0.5f,
+
+		// Face gauche
+		0.5f, -0.5f,  0.5f,
+		0.5f, -0.5f, -0.5f,
+		0.5f,  0.5f, -0.5f,
+		0.5f,  0.5f,  0.5f,
+
+		// Face droite
+		1.5f, -0.5f,  0.5f,
+		1.5f, -0.5f, -0.5f,
+		1.5f,  0.5f, -0.5f,
+		1.5f,  0.5f,  0.5f,
+
+		// Face supérieure
+		0.5f,  0.5f,  0.5f,
+		1.5f,  0.5f,  0.5f,
+		1.5f,  0.5f, -0.5f,
+		0.5f,  0.5f, -0.5f,
+
+		// Face inférieure
+		0.5f, -0.5f,  0.5f,
+		1.5f, -0.5f,  0.5f,
+		1.5f, -0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f
+	};
+
+	// Tableau des indices pour le premier cube
+	GLuint indices1[] = {
+		0, 1, 2,
+		2, 3, 0,
+		4, 5, 6,
+		6, 7, 4,
+		8, 9, 10,
+		10, 11, 8,
+		12, 13, 14,
+		14, 15, 12,
+		16, 17, 18,
+		18, 19, 16,
+		20, 21, 22,
+		22, 23, 20
+	};
+
+	// Tableau des indices pour le deuxième cube
+	GLuint indices2[] = {
+		0, 1, 2,
+		2, 3, 0,
+		4, 5, 6,
+		6, 7, 4,
+		8, 9, 10,
+		10, 11, 8,
+		12, 13, 14,
+		14, 15, 12,
+		16, 17, 18,
+		18, 19, 16,
+		20, 21, 22,
+		22, 23, 20
+	};
+	GLfloat colors1[] = {
+		// Couleurs du premier cube (rouge)
+		1.0f, 0.0f, 0.0f, // Rouge
+		1.0f, 0.0f, 0.0f, // Rouge
+		// ...
+	};
+
+	GLfloat colors2[] = {
+		// Couleurs du deuxième cube (jaune)
+		1.0f, 1.0f, 0.0f, // Jaune
+		1.0f, 1.0f, 0.0f, // Jaune
+		// ...
+	};
+
+	// Création et configuration du VAO pour le premier cube
+	GLuint VAO1;
+	glGenVertexArrays(1, &VAO1);
+	glBindVertexArray(VAO1);
+
+	// Création et configuration du VBO pour les sommets du premier cube
+	GLuint VBO1;
+	glGenBuffers(1, &VBO1);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO1);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	// Création et configuration du VBO pour les couleurs du premier cube
+	GLuint colorVBO1;
+	glGenBuffers(1, &colorVBO1);
+	glBindBuffer(GL_ARRAY_BUFFER, colorVBO1);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(colors1), colors1, GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(1);
+
+	// Création et configuration de l'EBO pour le premier cube
+	GLuint EBO1;
+	glGenBuffers(1, &EBO1);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO1);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices1), indices1, GL_STATIC_DRAW);
+
+	// Création et configuration du VAO pour le deuxième cube
+	GLuint VAO2;
+	glGenVertexArrays(1, &VAO2);
+	glBindVertexArray(VAO2);
+
+	// Création et configuration du VBO pour les sommets du deuxième cube
+	GLuint VBO2;
+	glGenBuffers(1, &VBO2);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	// Création et configuration du VBO pour les couleurs du deuxième cube
+	GLuint colorVBO2;
+	glGenBuffers(1, &colorVBO2);
+	glBindBuffer(GL_ARRAY_BUFFER, colorVBO2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(colors2), colors2, GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(1);
+
+	// Création et configuration de l'EBO pour le deuxième cube
+	GLuint EBO2;
+	glGenBuffers(1, &EBO2);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO2);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices2), indices2, GL_STATIC_DRAW);
+
+	// Dessin du premier cube
+	glBindVertexArray(VAO1);
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+
+	// Dessin du deuxième cube
+	glBindVertexArray(VAO2);
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+
+	// Nettoyage des ressources
+	glDeleteVertexArrays(1, &VAO1);
+	glDeleteBuffers(1, &VBO1);
+	glDeleteBuffers(1, &colorVBO1);
+	glDeleteBuffers(1, &EBO1);
+	glDeleteVertexArrays(1, &VAO2);
+	glDeleteBuffers(1, &VBO2);
+	glDeleteBuffers(1, &colorVBO2);
+	glDeleteBuffers(1, &EBO2);
+}
 
 
 
@@ -331,10 +530,11 @@ int main() {
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.GetProgram(), "model"), 1, GL_FALSE, glm::value_ptr(floorModel));
 
 		// Draw the actual mesh
-		glDrawElements(GL_TRIANGLES, ind.size(), GL_UNSIGNED_INT, 0);
-		glDrawElements(GL_TRIANGLES, ind2.size(), GL_UNSIGNED_INT, 0);
+		/*glDrawElements(GL_TRIANGLES, ind.size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, ind2.size(), GL_UNSIGNED_INT, 0);*/
 
-
+		drawTwoCubes();
+		
 		// Swap the back buffer with the front buffer
 		glfwSwapBuffers(window);
 		// Take care of all GLFW events
