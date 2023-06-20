@@ -1,7 +1,6 @@
 #define GLEW_STATIC 1
 
 #include <iostream>
-
 #if _MSC_VER
 #define DLL_EXPORT _declspec(dllexport)
 #else
@@ -33,6 +32,12 @@ GLuint indices[] =
 
 const unsigned int width = 500;
 const unsigned int height = 500;
+
+
+
+
+
+
 
 int main() {
 	// Initialize GLFW
@@ -82,6 +87,8 @@ int main() {
 		Texture("planksSpec.png", "specular", 1)
 	};
 
+	
+
 	// Generates Shader object using shaders default.vs.glsl and default.vs.glsl
 	GLShader shaderProgram;
 	shaderProgram.LoadVertexShader("default.vs.glsl");
@@ -92,7 +99,6 @@ int main() {
 	std::vector <GLuint> ind(indices, indices + sizeof(indices) / sizeof(GLuint));
 	std::vector <Texture> tex(textures, textures + sizeof(textures) / sizeof(Texture));
 	// Create floor mesh
-	Mesh floor(verts, ind, tex);
 	glm::vec3 floorPos = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::mat4 floorModel = glm::mat4(1.0f);
 	glUseProgram(shaderProgram.GetProgram());
@@ -124,6 +130,94 @@ int main() {
 		camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
 		// Draws different meshes
+
+
+		VAO VAO;
+		VAO.Bind();
+		// Generates Vertex Buffer Object and links it to vertices
+		VBO VBO(verts);
+		// Generates Element Buffer Object and links it to indices
+		EBO EBO(ind);
+		// Links VBO attributes such as coordinates and colors to VAO
+		VAO.LinkAttrib(VBO, 0, 3, GL_FLOAT, sizeof(Vertex), (void*)0);
+		VAO.LinkAttrib(VBO, 1, 3, GL_FLOAT, sizeof(Vertex), (void*)(3 * sizeof(float)));
+		VAO.LinkAttrib(VBO, 2, 3, GL_FLOAT, sizeof(Vertex), (void*)(6 * sizeof(float)));
+		VAO.LinkAttrib(VBO, 3, 2, GL_FLOAT, sizeof(Vertex), (void*)(9 * sizeof(float)));
+		// Unbind all to prevent accidentally modifying them
+		VAO.Unbind();
+		VBO.Unbind();
+		EBO.Unbind();
+
+
+
+
+		glUseProgram(shaderProgram.GetProgram());
+		VAO.Bind();
+
+		// Keep track of how many of each type of textures we have
+		unsigned int numDiffuse = 0;
+		unsigned int numSpecular = 0;
+
+		for (unsigned int i = 0; i < tex.size(); i++)
+		{
+			std::string num;
+			std::string type = tex[i].type;
+			if (type == "diffuse")
+			{
+				num = std::to_string(numDiffuse++);
+			}
+			else if (type == "specular")
+			{
+				num = std::to_string(numSpecular++);
+			}
+			tex[i].texUnit(shaderProgram, (type + num).c_str(), i);
+			tex[i].Bind();
+		}
+		// Take care of the camera Matrix
+		glUniform3f(glGetUniformLocation(shaderProgram.GetProgram(), "camPos"), camera.Position.x, camera.Position.y, camera.Position.z);
+		camera.Matrix(shaderProgram, "camMatrix");
+
+		// Initialize matrices
+		glm::mat4 trans = glm::mat4(1.0f);
+		glm::mat4 rot = glm::mat4(1.0f);
+		glm::mat4 sca = glm::mat4(1.0f);
+		glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+		glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
+
+		// Transform the matrices to their correct form
+		trans = glm::translate(trans, floorPos);
+		rot = glm::mat4_cast(rotation);
+		sca = glm::scale(sca, scale);
+
+		// Push the matrices to the vertex shader
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.GetProgram(), "translation"), 1, GL_FALSE, glm::value_ptr(trans));
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.GetProgram(), "rotation"), 1, GL_FALSE, glm::value_ptr(rot));
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.GetProgram(), "scale"), 1, GL_FALSE, glm::value_ptr(sca));
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.GetProgram(), "model"), 1, GL_FALSE, glm::value_ptr(floorModel));
+
+		// Draw the actual mesh
+		glDrawElements(GL_TRIANGLES, ind.size(), GL_UNSIGNED_INT, 0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		floor.Draw(shaderProgram, camera, floorModel, floorPos);
 
 		// Swap the back buffer with the front buffer
@@ -131,6 +225,18 @@ int main() {
 		// Take care of all GLFW events
 		glfwPollEvents();
 	}
+
+
+
+
+
+
+
+
+
+
+
+
 
 	// Clear the app before ending the program
 	shaderProgram.Destroy();
