@@ -58,7 +58,33 @@ Vertex vertices[] =
 	Vertex{glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 1.0f)}
 };
 
+// Indices
+GLuint indices[] =
+{
+	// Face avant
+	0, 1, 2,
+	2, 3, 0,
 
+	// Face arrière
+	4, 5, 6,
+	6, 7, 4,
+
+	// Face gauche
+	8, 9, 10,
+	10, 11, 8,
+
+	// Face droite
+	12, 13, 14,
+	14, 15, 12,
+
+	// Face supérieure
+	16, 17, 18,
+	18, 19, 16,
+
+	// Face inférieure
+	20, 21, 22,
+	22, 23, 20
+};
 
 // Vertices du deuxième cube
 Vertex vertices2[] =
@@ -100,32 +126,7 @@ Vertex{ glm::vec3(-1.5f, 2.5f, 7.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.
 };
 
 
-GLuint indices[] =
-{
-	// Face avant
-	0, 1, 2,
-	2, 3, 0,
 
-	// Face arrière
-	4, 5, 6,
-	6, 7, 4,
-
-	// Face gauche
-	8, 9, 10,
-	10, 11, 8,
-
-	// Face droite
-	12, 13, 14,
-	14, 15, 12,
-
-	// Face supérieure
-	16, 17, 18,
-	18, 19, 16,
-
-	// Face inférieure
-	20, 21, 22,
-	22, 23, 20
-};
 // Indices du deuxième cube
 GLuint indices2[] =
 {
@@ -197,13 +198,8 @@ int main() {
 	{
 		Texture("planks.png", "diffuse", 0),
 		Texture("planksSpec.png", "specular", 1)
-	};
-	/*Texture textures2[]
-	{
-		Texture("bricks.png", "diffuse", 0),
-		Texture("bricks.png", "specular", 1)
-
-	};*/
+	};	
+	
 
 	
 
@@ -219,7 +215,7 @@ int main() {
 
 	std::vector <Vertex> verts2(vertices2, vertices2 + sizeof(vertices2) / sizeof(Vertex));
 	std::vector <GLuint> ind2(indices2, indices2 + sizeof(indices2) / sizeof(GLuint));
-	//::vector <Texture> tex2(textures2, textures2 + sizeof(textures2 )/ sizeof(Texture));
+	
 
 
 	glm::vec3 floorPos = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -242,7 +238,7 @@ int main() {
 
 		
 		// Specify the color of the background
-		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+		glClearColor(0.5f, 0.5f,0.5f, 1.0f);
 		// Clean the back buffer and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -252,7 +248,6 @@ int main() {
 		// Updates and exports the camera matrix to the Vertex Shader
 		camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
-		// Draws different meshes
 
 
 		UTILS VAO;
@@ -311,6 +306,8 @@ int main() {
 			tex[i].texUnit(shaderProgram, (type + num).c_str(), i);
 			tex[i].Bind();
 		}
+
+
 		// Take care of the camera Matrix
 		glUniform3f(glGetUniformLocation(shaderProgram.GetProgram(), "camPos"), camera.Position.x, camera.Position.y, camera.Position.z);
 		camera.Matrix(shaderProgram, "camMatrix");
@@ -335,7 +332,6 @@ int main() {
 
 		// Draw the actual mesh
 		glDrawElements(GL_TRIANGLES, ind.size(), GL_UNSIGNED_INT, 0);
-
 		glDrawElements(GL_TRIANGLES, ind2.size(), GL_UNSIGNED_INT, 0);
 
 
