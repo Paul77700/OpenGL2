@@ -86,6 +86,63 @@ GLuint indices[] =
 	22, 23, 20
 };
 
+// Vertices du deuxième cube
+Vertex vertices2[] =
+{
+	// Face avant
+	Vertex{glm::vec3(1.5f, 2.5f, 3.5f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f)},
+	Vertex{glm::vec3(3.5f, 2.5f, 3.5f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 0.0f)},
+	Vertex{glm::vec3(3.5f, 3.5f, 3.5f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
+	Vertex{glm::vec3(1.5f, 3.5f, 3.5f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+
+	// Face arrière
+	Vertex{glm::vec3(3.5f, 2.5f, -2.5f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 0.0f)},
+	Vertex{glm::vec3(1.5f, 2.5f, -2.5f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 0.0f)},
+	Vertex{glm::vec3(1.5f, 3.5f, -2.5f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 1.0f)},
+	Vertex{glm::vec3(3.5f, 3.5f, -2.5f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 1.0f)},
+
+	// Face gauche
+	Vertex{glm::vec3(1.5f, 2.5f, -2.5f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
+	Vertex{glm::vec3(1.5f, 2.5f, 3.5f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
+	Vertex{glm::vec3(1.5f, 3.5f, 3.5f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)},
+	Vertex{glm::vec3(1.5f, 3.5f, -2.5f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f)},
+
+	// Face droite
+	Vertex{glm::vec3(3.5f, 2.5f, 3.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
+	Vertex{glm::vec3(3.5f, 2.5f, -2.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
+	Vertex{glm::vec3(3.5f, 3.5f, -2.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)},
+	Vertex{glm::vec3(3.5f, 3.5f, 3.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f)},
+
+	// Face supérieure
+	Vertex{glm::vec3(1.5f, 3.5f, 3.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
+	Vertex{glm::vec3(3.5f, 3.5f, 3.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
+	Vertex{glm::vec3(3.5f, 3.5f, -2.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 1.0f)},
+	Vertex{glm::vec3(1.5f, 3.5f, -2.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 1.0f)},
+
+	// Face inférieure
+	Vertex{glm::vec3(1.5f, 2.5f, -2.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
+	Vertex{glm::vec3(3.5f, 2.5f, -2.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
+	Vertex{glm::vec3(3.5f, 2.5f, 3.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 1.0f)},
+	Vertex{glm::vec3(1.5f, 2.5f, 3.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 1.0f)}
+};
+
+
+// Indices du deuxième cube
+GLuint indices2[] =
+{
+	0, 1, 2, 2, 3, 0,   // Face avant
+	4, 5, 6, 6, 7, 4,   // Face arrière
+	8, 9, 10, 10, 11, 8, // Face gauche
+	12, 13, 14, 14, 15, 12, // Face droite
+	16, 17, 18, 18, 19, 16, // Face supérieure
+	20, 21, 22, 22, 23, 20 // Face inférieure
+};
+
+
+
+
+
+
 const unsigned int width = 1000;
 const unsigned int height = 700;
 
@@ -154,7 +211,11 @@ int main() {
 	std::vector <Vertex> verts(vertices, vertices + sizeof(vertices) / sizeof(Vertex));
 	std::vector <GLuint> ind(indices, indices + sizeof(indices) / sizeof(GLuint));
 	std::vector <Texture> tex(textures, textures + sizeof(textures) / sizeof(Texture));
-	// Create floor mesh
+
+	std::vector <Vertex> verts2(vertices2, vertices2 + sizeof(vertices2) / sizeof(Vertex));
+	std::vector <GLuint> ind2(indices2, indices2 + sizeof(indices2) / sizeof(GLuint));
+
+
 	glm::vec3 floorPos = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::mat4 floorModel = glm::mat4(1.0f);
 	glUseProgram(shaderProgram.GetProgram());
@@ -204,11 +265,26 @@ int main() {
 		VBO.unbindVbo();
 		EBO.unbindEbo();
 
-
+		UTILS VAO2;
+		VAO2.bindVao();
+		// Generates Vertex Buffer Object and links it to vertices
+		UTILS VBO2(verts2);
+		// Generates Element Buffer Object and links it to indices
+		UTILS EBO2(ind2);
+		// Links VBO attributes such as coordinates and colors to VAO
+		VAO2.linkAttribVao(VBO2, 0, 3, GL_FLOAT, sizeof(Vertex), (void*)0);
+		VAO2.linkAttribVao(VBO2, 1, 3, GL_FLOAT, sizeof(Vertex), (void*)(3 * sizeof(float)));
+		VAO2.linkAttribVao(VBO2, 2, 3, GL_FLOAT, sizeof(Vertex), (void*)(6 * sizeof(float)));
+		VAO2.linkAttribVao(VBO2, 3, 2, GL_FLOAT, sizeof(Vertex), (void*)(9 * sizeof(float)));
+		// Unbind all to prevent accidentally modifying them
+		VAO2.unbindVao();
+		VBO2.unbindVbo();
+		EBO2.unbindEbo();
 
 
 		glUseProgram(shaderProgram.GetProgram());
 		VAO.bindVao();
+		VAO2.bindVao();
 
 		// Keep track of how many of each type of textures we have
 		unsigned int numDiffuse = 0;
@@ -253,6 +329,7 @@ int main() {
 
 		// Draw the actual mesh
 		glDrawElements(GL_TRIANGLES, ind.size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, ind2.size(), GL_UNSIGNED_INT, 0);
 
 
 		// Swap the back buffer with the front buffer
