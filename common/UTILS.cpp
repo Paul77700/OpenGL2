@@ -1,18 +1,18 @@
 #include"UTILS.h"
 #include <GL/glew.h>
 
-UTILS::UTILS(GLuint* indices, GLsizeiptr size)
+UTILS::UTILS(std::vector<GLuint>& indices)
 {
 	glGenBuffers(1, &ID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 }
 
-UTILS::UTILS(GLfloat* vertices, GLsizeiptr size)
+UTILS::UTILS(std::vector<Vertex>& vertices)
 {
 	glGenBuffers(1, &ID);
 	glBindBuffer(GL_ARRAY_BUFFER, ID);
-	glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
 }
 
 UTILS::UTILS()
