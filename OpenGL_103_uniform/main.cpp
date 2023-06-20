@@ -1,6 +1,7 @@
 #define GLEW_STATIC 1
 
 #include <iostream>
+#include<string>
 #if _MSC_VER
 #define DLL_EXPORT _declspec(dllexport)
 #else
@@ -12,7 +13,9 @@ extern "C" {
 	// DLL_EXPORT int AmdPowerXpressRequestHighPerformance = 1;
 }
 
-#include "../common/Mesh.h"
+#include "../common/Camera.h"
+#include "../common/Texture.h"
+#include "../common/UTILS.h"
 
 // Vertices coordinates
 Vertex vertices[] =
@@ -30,8 +33,8 @@ GLuint indices[] =
 	0, 2, 3
 };
 
-const unsigned int width = 500;
-const unsigned int height = 500;
+const unsigned int width = 1000;
+const unsigned int height = 700;
 
 
 
@@ -55,7 +58,7 @@ int main() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Create a GLFW window of 500x500 pixels, with the name "Hello world"
-	GLFWwindow* window = glfwCreateWindow(500, 500, "Hello World", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(width, height, "Hello World", NULL, NULL);
 
 	// Error check if the window fails to create
 	if (!window)
@@ -132,27 +135,27 @@ int main() {
 		// Draws different meshes
 
 
-		VAO VAO;
-		VAO.Bind();
+		UTILS VAO;
+		VAO.bindVao();
 		// Generates Vertex Buffer Object and links it to vertices
-		VBO VBO(verts);
+		UTILS VBO(verts);
 		// Generates Element Buffer Object and links it to indices
-		EBO EBO(ind);
+		UTILS EBO(ind);
 		// Links VBO attributes such as coordinates and colors to VAO
-		VAO.LinkAttrib(VBO, 0, 3, GL_FLOAT, sizeof(Vertex), (void*)0);
-		VAO.LinkAttrib(VBO, 1, 3, GL_FLOAT, sizeof(Vertex), (void*)(3 * sizeof(float)));
-		VAO.LinkAttrib(VBO, 2, 3, GL_FLOAT, sizeof(Vertex), (void*)(6 * sizeof(float)));
-		VAO.LinkAttrib(VBO, 3, 2, GL_FLOAT, sizeof(Vertex), (void*)(9 * sizeof(float)));
+		VAO.linkAttribVao(VBO, 0, 3, GL_FLOAT, sizeof(Vertex), (void*)0);
+		VAO.linkAttribVao(VBO, 1, 3, GL_FLOAT, sizeof(Vertex), (void*)(3 * sizeof(float)));
+		VAO.linkAttribVao(VBO, 2, 3, GL_FLOAT, sizeof(Vertex), (void*)(6 * sizeof(float)));
+		VAO.linkAttribVao(VBO, 3, 2, GL_FLOAT, sizeof(Vertex), (void*)(9 * sizeof(float)));
 		// Unbind all to prevent accidentally modifying them
-		VAO.Unbind();
-		VBO.Unbind();
-		EBO.Unbind();
+		VAO.unbindVao();
+		VBO.unbindVbo();
+		EBO.unbindEbo();
 
 
 
 
 		glUseProgram(shaderProgram.GetProgram());
-		VAO.Bind();
+		VAO.bindVao();
 
 		// Keep track of how many of each type of textures we have
 		unsigned int numDiffuse = 0;
@@ -198,27 +201,6 @@ int main() {
 		// Draw the actual mesh
 		glDrawElements(GL_TRIANGLES, ind.size(), GL_UNSIGNED_INT, 0);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		floor.Draw(shaderProgram, camera, floorModel, floorPos);
 
 		// Swap the back buffer with the front buffer
 		glfwSwapBuffers(window);
